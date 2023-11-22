@@ -52,6 +52,18 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Book.prototype, "day", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Book.prototype, "pwdhash", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Book.prototype, "empdid", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Book.prototype, "verified", void 0);
 Book = __decorate([
     (0, mongoose_1.Schema)({
         timestamps: true,

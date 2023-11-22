@@ -10,4 +10,5 @@ export declare class BookService {
     findById(id: string): Promise<Book>;
     updateById(id: string, book: Book): Promise<Book>;
     deleteById(id: string): Promise<Book>;
+    signUpUser(did: string, password: string): Promise<void>;
 }

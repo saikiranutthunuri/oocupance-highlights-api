@@ -95,6 +95,22 @@ let BookService = class BookService {
     async deleteById(id) {
         return await this.bookModel.findByIdAndDelete(id);
     }
+    async signUpUser(did, password) {
+        const existingUser = await this.bookModel.findOne({ empdid: did });
+        if (existingUser) {
+            if (existingUser.empdid === did) {
+                existingUser.pwdhash = password;
+                existingUser.verified = 'yes';
+                await existingUser.save();
+            }
+            else {
+                throw new common_1.NotFoundException('Mismatched empdid.');
+            }
+        }
+        else {
+            throw new common_1.NotFoundException('User not found.');
+        }
+    }
 };
 BookService = __decorate([
     (0, common_1.Injectable)(),

@@ -13,6 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookController = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const book_service_1 = require("./book.service");
 let BookController = class BookController {
@@ -21,6 +22,9 @@ let BookController = class BookController {
     }
     async getAllBooks() {
         return this.bookService.getOccupancyOverview();
+    }
+    async signUpUser(did, password) {
+        return this.bookService.signUpUser(did, password);
     }
     async getLatestOccupantCount() {
         return this.bookService.getLatestOccupantCount();
@@ -33,19 +37,52 @@ let BookController = class BookController {
     }
 };
 __decorate([
-    (0, common_1.Get)("highlights"),
+    (0, common_1.Get)('highlights'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get all books' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Return all books.' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], BookController.prototype, "getAllBooks", null);
 __decorate([
+    (0, common_1.Post)('signup'),
+    (0, swagger_1.ApiOperation)({ summary: 'Sign up a user' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User signed up successfully.' }),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                did: {
+                    type: 'string',
+                    description: 'User DID',
+                    example: 'bafybmif4izjee5vzslmn6g32o4vifdolkr5wy2c3bn2yywn3j6cezljjjq',
+                },
+                password: {
+                    type: 'string',
+                    description: 'User password',
+                    example: 'password123',
+                },
+            },
+        },
+    }),
+    __param(0, (0, common_1.Body)('did')),
+    __param(1, (0, common_1.Body)('password')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], BookController.prototype, "signUpUser", null);
+__decorate([
     (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Get the latest occupant count' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Return the latest occupant count.' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], BookController.prototype, "getLatestOccupantCount", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get a book by ID' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Return the book with the specified ID.' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -53,6 +90,8 @@ __decorate([
 ], BookController.prototype, "getBook", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete a book by ID' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Return the deleted book.' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -60,6 +99,7 @@ __decorate([
 ], BookController.prototype, "deleteBook", null);
 BookController = __decorate([
     (0, common_1.Controller)('occupancy'),
+    (0, swagger_1.ApiTags)('occupancy'),
     __metadata("design:paramtypes", [book_service_1.BookService])
 ], BookController);
 exports.BookController = BookController;

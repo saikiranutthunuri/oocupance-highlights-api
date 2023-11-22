@@ -36,6 +36,15 @@ export class Book {
   day: string;
   date: string;
 
+  @Prop()
+  pwdhash: string;
+
+  @Prop()
+  empdid: string;
+
+  @Prop()
+  verified: string;
+
 
 
 }

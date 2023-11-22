@@ -39,6 +39,9 @@ export declare class Book {
     timestamp: string;
     day: string;
     date: string;
+    pwdhash: string;
+    empdid: string;
+    verified: string;
 }
 export declare class hvac {
 }

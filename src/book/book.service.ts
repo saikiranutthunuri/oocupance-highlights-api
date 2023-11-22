@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Book } from './schemas/book.schema';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class BookService {
@@ -105,4 +106,32 @@ async getLatestOccupantCount(): Promise<any> {
   async deleteById(id: string): Promise<Book> {
     return await this.bookModel.findByIdAndDelete(id);
   }
+  
+
+async signUpUser(did: string, password: string): Promise<void> {
+  // Check if there is any document in the collection with the given DID
+  const existingUser = await this.bookModel.findOne({ empdid: did });
+
+  if (existingUser) {
+    // Check if the found document's empdid matches the provided did
+    if (existingUser.empdid === did) {
+      // If a match is found, update the password and set 'verified' to 'yes'
+      existingUser.pwdhash = password;
+      existingUser.verified = 'yes';
+
+      // Save the updated user document
+      await existingUser.save();
+    } else {
+      // If empdid does not match, you can choose to handle this case accordingly
+      throw new NotFoundException('Mismatched empdid.');
+    }
+  } else {
+    // If no document is found, you can choose to handle this case accordingly
+    throw new NotFoundException('User not found.');
+  }
+}
+
+
+
+  
 }
