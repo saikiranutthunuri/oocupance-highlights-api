@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Book } from './schemas/book.schema';
-import bcrypt from 'bcrypt';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class BookService {
@@ -108,28 +108,43 @@ async getLatestOccupantCount(): Promise<any> {
   }
   
 
-async signUpUser(did: string, password: string): Promise<void> {
-  // Check if there is any document in the collection with the given DID
-  const existingUser = await this.bookModel.findOne({ empdid: did });
+  async signUpUser(did: string, password: string): Promise<void> {
+    // Check if there is any document in the collection with the given DID
+    const existingUser = await this.bookModel.findOne({ empdid: did });
 
-  if (existingUser) {
-    // Check if the found document's empdid matches the provided did
-    if (existingUser.empdid === did) {
-      // If a match is found, update the password and set 'verified' to 'yes'
-      existingUser.pwdhash = password;
-      existingUser.verified = 'yes';
+    if (existingUser) {
+      // Check if the found document's empdid matches the provided did
+      if (existingUser.empdid === did) {
+        // Hash the provided password
+        const hashedPassword = await this.hashPassword(password);
 
-      // Save the updated user document
-      await existingUser.save();
+        // If a match is found, update the password and set 'verified' to 'yes'
+        existingUser.pwdhash = hashedPassword;
+        existingUser.verified = 'yes';
+
+        // Save the updated user document
+        await existingUser.save();
+      } else {
+        // If empdid does not match, you can choose to handle this case accordingly
+        throw new NotFoundException('Mismatched empdid.');
+      }
     } else {
-      // If empdid does not match, you can choose to handle this case accordingly
-      throw new NotFoundException('Mismatched empdid.');
+      // If no document is found, you can choose to handle this case accordingly
+      throw new NotFoundException('User not found.');
     }
-  } else {
-    // If no document is found, you can choose to handle this case accordingly
-    throw new NotFoundException('User not found.');
   }
-}
+
+  // Password hashing function
+   private async hashPassword(password: string): Promise<string> {
+    try {
+      // Implement your password hashing logic here using argon2
+      const hashedPassword = await argon2.hash(password);
+      return hashedPassword;
+    } catch (error) {
+      // Handle hashing error
+      throw new Error('Error hashing password');
+    }
+  }
 
 
 

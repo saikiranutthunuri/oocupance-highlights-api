@@ -11,4 +11,5 @@ export declare class BookService {
     updateById(id: string, book: Book): Promise<Book>;
     deleteById(id: string): Promise<Book>;
     signUpUser(did: string, password: string): Promise<void>;
+    private hashPassword;
 }

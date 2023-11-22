@@ -8,6 +8,6 @@ async function bootstrap() {
   // Add Swagger documentation
   setupSwagger(app);
 
-  await app.listen(3001);
+  await app.listen(5052);
 }
 bootstrap();

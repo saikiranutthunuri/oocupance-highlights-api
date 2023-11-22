@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose = require("mongoose");
 const book_schema_1 = require("./schemas/book.schema");
+const argon2 = require("argon2");
 let BookService = class BookService {
     constructor(bookModel) {
         this.bookModel = bookModel;
@@ -99,7 +100,8 @@ let BookService = class BookService {
         const existingUser = await this.bookModel.findOne({ empdid: did });
         if (existingUser) {
             if (existingUser.empdid === did) {
-                existingUser.pwdhash = password;
+                const hashedPassword = await this.hashPassword(password);
+                existingUser.pwdhash = hashedPassword;
                 existingUser.verified = 'yes';
                 await existingUser.save();
             }
@@ -109,6 +111,15 @@ let BookService = class BookService {
         }
         else {
             throw new common_1.NotFoundException('User not found.');
+        }
+    }
+    async hashPassword(password) {
+        try {
+            const hashedPassword = await argon2.hash(password);
+            return hashedPassword;
+        }
+        catch (error) {
+            throw new Error('Error hashing password');
         }
     }
 };
