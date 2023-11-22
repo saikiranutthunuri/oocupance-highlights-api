@@ -42,6 +42,8 @@ export declare class Book {
     pwdhash: string;
     empdid: string;
     verified: string;
+    lockStatus: string;
+    rewardsconsent: string;
 }
 export declare class hvac {
 }

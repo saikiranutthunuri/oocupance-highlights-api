@@ -64,6 +64,14 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Book.prototype, "verified", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Book.prototype, "lockStatus", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Book.prototype, "rewardsconsent", void 0);
 Book = __decorate([
     (0, mongoose_1.Schema)({
         timestamps: true,

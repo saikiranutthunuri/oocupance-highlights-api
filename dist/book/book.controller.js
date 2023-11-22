@@ -26,6 +26,15 @@ let BookController = class BookController {
     async signUpUser(did, password) {
         return this.bookService.signUpUser(did, password);
     }
+    async signInUser(did, password) {
+        return this.bookService.loginUser(did, password);
+    }
+    async updateLockStatus(did, lockStatus) {
+        return this.bookService.updateLockStatus(did, lockStatus);
+    }
+    async updateRewardsConsentStatus(did, rewardsConsentStatus) {
+        return this.bookService.updateRewardsConsentStatus(did, rewardsConsentStatus);
+    }
     async getLatestOccupantCount() {
         return this.bookService.getLatestOccupantCount();
     }
@@ -71,6 +80,77 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], BookController.prototype, "signUpUser", null);
+__decorate([
+    (0, common_1.Post)('signin'),
+    (0, swagger_1.ApiOperation)({ summary: 'Sign in a user' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User signed in successfully.' }),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                did: {
+                    type: 'string',
+                    description: 'User DID',
+                    example: 'bafybmif4izjee5vzslmn6g32o4vifdolkr5wy2c3bn2yywn3j6cezljjjq',
+                },
+                password: {
+                    type: 'string',
+                    description: 'User password',
+                    example: 'password123',
+                },
+            },
+        },
+    }),
+    __param(0, (0, common_1.Body)('did')),
+    __param(1, (0, common_1.Body)('password')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], BookController.prototype, "signInUser", null);
+__decorate([
+    (0, common_1.Post)('update-lock-status/:did'),
+    (0, swagger_1.ApiOperation)({ summary: 'Update user lock status by DID' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User lock status updated successfully.' }),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                lockStatus: {
+                    type: 'string',
+                    description: 'User lock status (yes or no)',
+                    example: 'yes',
+                },
+            },
+        },
+    }),
+    __param(0, (0, common_1.Param)('did')),
+    __param(1, (0, common_1.Body)('lockStatus')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], BookController.prototype, "updateLockStatus", null);
+__decorate([
+    (0, common_1.Post)('update-rewards-consent/:did'),
+    (0, swagger_1.ApiOperation)({ summary: 'Update user rewards consent status by DID' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User rewards consent status updated successfully.' }),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                rewardsConsentStatus: {
+                    type: 'string',
+                    description: 'User rewards consent status (yes or no)',
+                    example: 'yes',
+                },
+            },
+        },
+    }),
+    __param(0, (0, common_1.Param)('did')),
+    __param(1, (0, common_1.Body)('rewardsConsentStatus')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], BookController.prototype, "updateRewardsConsentStatus", null);
 __decorate([
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'Get the latest occupant count' }),

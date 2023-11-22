@@ -122,6 +122,51 @@ let BookService = class BookService {
             throw new Error('Error hashing password');
         }
     }
+    async loginUser(did, password) {
+        const existingUser = await this.bookModel.findOne({ empdid: did });
+        if (existingUser) {
+            if (existingUser.empdid === did) {
+                const isPasswordMatch = await argon2.verify(existingUser.pwdhash, password);
+                if (isPasswordMatch) {
+                    return 'User logged in successfully';
+                }
+                else {
+                    throw new common_1.NotFoundException('Wrong password.');
+                }
+            }
+            else {
+                throw new common_1.NotFoundException('Mismatched empdid.');
+            }
+        }
+        else {
+            throw new common_1.NotFoundException('User not found.');
+        }
+    }
+    async updateLockStatus(did, lockStatus) {
+        const existingUser = await this.bookModel.findOne({ empdid: did });
+        if (existingUser) {
+            existingUser.lockStatus = lockStatus;
+            await existingUser.save();
+        }
+        else {
+            throw new common_1.NotFoundException('User not found.');
+        }
+    }
+    async updateRewardsConsentStatus(did, rewardsConsentStatus) {
+        const existingUser = await this.bookModel.findOne({ empdid: did });
+        if (existingUser) {
+            if (existingUser.empdid === did) {
+                existingUser.rewardsconsent = rewardsConsentStatus;
+                await existingUser.save();
+            }
+            else {
+                throw new common_1.NotFoundException('Mismatched empdid.');
+            }
+        }
+        else {
+            throw new common_1.NotFoundException('User not found.');
+        }
+    }
 };
 BookService = __decorate([
     (0, common_1.Injectable)(),

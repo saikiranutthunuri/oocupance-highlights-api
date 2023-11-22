@@ -12,4 +12,7 @@ export declare class BookService {
     deleteById(id: string): Promise<Book>;
     signUpUser(did: string, password: string): Promise<void>;
     private hashPassword;
+    loginUser(did: string, password: string): Promise<string>;
+    updateLockStatus(did: string, lockStatus: string): Promise<void>;
+    updateRewardsConsentStatus(did: string, rewardsConsentStatus: string): Promise<void>;
 }

@@ -145,6 +145,64 @@ async getLatestOccupantCount(): Promise<any> {
       throw new Error('Error hashing password');
     }
   }
+ async loginUser(did: string, password: string): Promise<string> {
+    // Check if there is any document in the collection with the given DID
+    const existingUser = await this.bookModel.findOne({ empdid: did });
+
+    if (existingUser) {
+      // Check if the found document's empdid matches the provided did
+      if (existingUser.empdid === did) {
+        // Rehash the stored password for comparison
+        const isPasswordMatch = await argon2.verify(existingUser.pwdhash, password);
+
+        if (isPasswordMatch) {
+          // Password matches, return a success message or a token
+          return 'User logged in successfully';
+        } else {
+          // Password does not match, throw an exception
+          throw new NotFoundException('Wrong password.');
+        }
+      } else {
+        // If empdid does not match, you can choose to handle this case accordingly
+        throw new NotFoundException('Mismatched empdid.');
+      }
+    } else {
+      // If no document is found, you can choose to handle this case accordingly
+      throw new NotFoundException('User not found.');
+    }
+  }
+
+
+    async updateLockStatus(did: string, lockStatus: string): Promise<void> {
+    // Check if there is any document in the collection with the given DID
+    const existingUser = await this.bookModel.findOne({ empdid: did });
+
+    if (existingUser) {
+      // Update the lock status
+      existingUser.lockStatus = lockStatus;
+
+      // Save the updated user document
+      await existingUser.save();
+    } else {
+      // If no document is found, you can choose to handle this case accordingly
+      throw new NotFoundException('User not found.');
+    }
+  }
+
+  async updateRewardsConsentStatus(did: string, rewardsConsentStatus: string): Promise<void> {
+    const existingUser = await this.bookModel.findOne({ empdid: did });
+
+    if (existingUser) {
+      if (existingUser.empdid === did) {
+        existingUser.rewardsconsent = rewardsConsentStatus;
+        await existingUser.save();
+      } else {
+        throw new NotFoundException('Mismatched empdid.');
+      }
+    } else {
+      throw new NotFoundException('User not found.');
+    }
+  }
 
 
 

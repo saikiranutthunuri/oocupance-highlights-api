@@ -45,6 +45,12 @@ export class Book {
   @Prop()
   verified: string;
 
+  @Prop()
+  lockStatus: string;
+
+  @Prop()
+  rewardsconsent: string;
+
 
 
 }
